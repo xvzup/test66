@@ -40,7 +40,7 @@ spec:
         git 'https://github.com/jenkinsci/docker-jnlp-slave.git'
         container(name: 'kaniko', shell: '/busybox/sh') {
             sh '''#!/busybox/sh
-            /kaniko/executor -f `pwd`/Dockerfile -c `pwd` --insecure-skip-tls-verify --destination=mydockerregistry:5000/myorg/myimage
+            /kaniko/executor -f `pwd`/Dockerfile -c `pwd` --insecure-skip-tls-verify --destination=index.docker.io/andperu/test66
             '''
         }
       }
