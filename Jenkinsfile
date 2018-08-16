@@ -81,4 +81,7 @@ kubectl delete job test66
       }
     }
   }
+  environment {
+    DESTINATION = 'andperu/hello_xxx'
+  }
 }
