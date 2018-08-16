@@ -19,6 +19,19 @@ fi
 echo "Creating build-context"
 kubectl create cm context-input --from-file=context/Dockerfile --from-file=context/hello_world.py
 
+echo "Deleting old jobs"
+if [ `kubectl get jobs | grep -w kaniko | wc -l` -ne 0 ]; then
+  kubectl delete job kaniko
+fi'''
+        }
+
+      }
+    }
+    stage('Build Image') {
+      steps {
+        withKubeConfig(contextName: 'c2.fra.k8scluster.de', credentialsId: '24d2e3c8-8b53-4333-99d4-62181446e589') {
+          sh '''kubectl apply -f kaniko_job.yaml
+
 '''
         }
 
