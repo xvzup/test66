@@ -72,8 +72,8 @@ while true; do
   sleep 5
 done
 
+kubectl get pod -l=job-name=test66 -o yaml
 kubectl delete job test66
-
 
 '''
         }
