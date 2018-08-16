@@ -30,7 +30,9 @@ fi'''
     stage('Build Image') {
       steps {
         withKubeConfig(contextName: 'c2.fra.k8scluster.de', credentialsId: '24d2e3c8-8b53-4333-99d4-62181446e589') {
-          sh '''kubectl apply -f kaniko_job.yaml
+          sh '''#!/bin/bash
+          
+kubectl apply -f kaniko_job.yaml
 
 while true; do
   kubectl get pod -a -l=job-name=kaniko
