@@ -59,7 +59,7 @@ done
         withKubeConfig(contextName: 'c2.fra.k8scluster.de', credentialsId: '24d2e3c8-8b53-4333-99d4-62181446e589') {
           sh '''#!/bin/bash
 
-kubectl run test66 --image=andperu/hello_world --restart=OnFailure --image-pull-policy=Always
+kubectl run test66 --image=andperu/hello_world:${BUILD_NUMBER} --restart=OnFailure --image-pull-policy=Always
 
 while true; do
   kubectl get pod -a -l=job-name=test66
