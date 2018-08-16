@@ -34,7 +34,7 @@ fi'''
 
 while true; do
   kubectl get pod -a -l=job-name=kaniko
-  if [ `kubectl get pod -a -l=job-name=kaniko | grep -v \^NAME | awk '{print $3}'` == "Completed" ]; then
+  if [ `kubectl get pod -a -l=job-name=kaniko | tail -1 | awk '{print $3}'` == "Completed" ]; then
     break;
   else
     sleep 3
