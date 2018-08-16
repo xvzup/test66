@@ -42,7 +42,7 @@ while true; do
     kubectl logs -l=job-name=kaniko
     break
   fi
-  sleep 3
+  sleep 5
 done
 
 '''
@@ -56,7 +56,21 @@ done
           sh '''#!/bin/bash
 
 kubectl run test66 --image=andperu/hello_world --restart=OnFailure --image-pull-policy=Always
-kubectl label job test66 jenkinstestdeploy=true
+
+while true; do
+  kubectl get pod -a -l=job-name=test66
+  STATE=`kubectl get pod -a -l=job-name=test66 | tail -1 | awk \'{print $3}\'`
+  if [ "$STATE" = "Completed" ]; then
+    echo "Build done. Printing log"
+    kubectl logs -l=job-name=test66
+    break
+  fi
+  sleep 5
+done
+
+kubectl delete job test66
+
+
 '''
         }
 
