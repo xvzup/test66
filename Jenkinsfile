@@ -8,25 +8,41 @@ kind: Pod
 metadata:
   name: kaniko
 spec:
-  containers:
-  - name: kaniko
-    image: gcr.io/kaniko-project/executor:debug
-    imagePullPolicy: Always
-    command:
-    - /busybox/cat
-    tty: true
-    volumeMounts:
-      - name: jenkins-docker-cfg
-        mountPath: /root
-  volumes:
-  - name: jenkins-docker-cfg
-    projected:
-      sources:
-      - secret:
-          name: regcred
-          items:
-            - key: .dockerconfigjson
-              path: .docker/config.json
+  template:
+    spec:
+      initContainers:
+      - name: copycontext
+        image: busybox
+        command: ["sh", "-c"]
+        args: ["cp /input/* /context; chmod +x /context/*.py"]
+        volumeMounts:
+          - name: kaniko-context
+            mountPath: /context
+          - name: context-input
+            mountPath: /input
+      containers:
+      - name: kaniko
+        image: gcr.io/kaniko-project/executor:latest
+        args: ["--dockerfile=/context/Dockerfile",
+               "--context=dir://context",
+               "--destination=index.docker.io/andperu/hello_world",
+               "-v=debug"]
+        volumeMounts:
+          - name: kaniko-secret
+            mountPath: .docker/
+          - name: kaniko-context
+            mountPath: /context
+      restartPolicy: Never
+      volumes:
+        - name: kaniko-secret
+          secret:
+            secretName: kaniko-secret
+        - name: kaniko-context
+          persistentVolumeClaim:
+            claimName: kaniko
+        - name: context-input
+          configMap:
+            name: context-input
 """
       }
     }
