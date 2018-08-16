@@ -13,12 +13,11 @@ fi
 
 echo "Checking for build-context"
 if [ `kubectl get cm | grep context-input | wc -l` -eq 1 ]; then
-  echo "Deleting and recreating build-context"
+  echo "Deleting build-context"
   kubectl delete cm context-input
-  kubectl create cm context-input --from-file=context/Dockerfile --from-file=context/hello_world.py
 fi
-
-
+echo "Creating build-context"
+kubectl create cm context-input --from-file=context/Dockerfile --from-file=context/hello_world.py
 
 '''
         }
