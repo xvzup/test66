@@ -34,7 +34,7 @@ fi'''
 
 echo "Configuring kaniko_job.yaml"
 
-sed -i "s#--destination=index.docker.io/andperu/hello_world#--destination=index.docker.io/${DESTINATION}#" kaniko_job.yaml
+sed -i "s#--destination=index.docker.io/andperu/hello_world#--destination=index.docker.io/${DESTINATION}:${BUILD_NUMBER}#" kaniko_job.yaml
 
 kubectl apply -f kaniko_job.yaml
 
@@ -82,6 +82,6 @@ kubectl delete job test66
     }
   }
   environment {
-    DESTINATION = 'andperu/hello_xxx'
+    DESTINATION = 'andperu/hello_world'
   }
 }
