@@ -35,7 +35,7 @@ fi'''
 while true; do
   kubectl get pod -a -l=job-name=kaniko
   STATE=`kubectl get pod -a -l=job-name=kaniko | tail -1 | awk '{print $3}'`
-  if [ if "$STATE" == "Completed" ]; then
+  if [ "$STATE" == "Completed" ]; then
     break;
   else
     sleep 3
