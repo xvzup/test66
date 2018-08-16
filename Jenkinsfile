@@ -1,9 +1,8 @@
 pipeline {
   agent {
     kubernetes {
-      //cloud 'kubernetes'
       label 'kaniko'
-      yaml """
+      yaml '''
 kind: Pod
 metadata:
   name: kaniko
@@ -43,21 +42,17 @@ spec:
         - name: context-input
           configMap:
             name: context-input
-"""
-      }
+'''
     }
+
+  }
   stages {
     stage('Build with Kaniko') {
-      environment {
-        PATH = "/busybox:$PATH"
-      }
       steps {
-        git 'https://github.com/jenkinsci/docker-jnlp-slave.git'
-        container(name: 'kaniko', shell: '/busybox/sh') {
-            sh '''#!/busybox/sh
-            /kaniko/executor -f `pwd`/Dockerfile -c `pwd` --insecure-skip-tls-verify --destination=index.docker.io/andperu/test66
-            '''
+        withKubeConfig(contextName: 'c2.fra.k8scluster.de', credentialsId: '24d2e3c8-8b53-4333-99d4-62181446e589') {
+          sh 'kubectl version'
         }
+
       }
     }
   }
