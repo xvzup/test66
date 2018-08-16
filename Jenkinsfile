@@ -30,7 +30,6 @@ spec:
 """
       }
     }
-  }
   stages {
     stage('Build with Kaniko') {
       environment {
