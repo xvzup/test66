@@ -50,5 +50,16 @@ done
 
       }
     }
+    stage('Deploy to Kubernetes') {
+      steps {
+        withKubeConfig(contextName: 'c2.fra.k8scluster.de', credentialsId: '24d2e3c8-8b53-4333-99d4-62181446e589') {
+          sh '''#!/bin/bash
+
+kubectl run test66 --image=andperu/hello_world --restart=OnFailure --label=jenkinstestdeployment=true
+'''
+        }
+
+      }
+    }
   }
 }
