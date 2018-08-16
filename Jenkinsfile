@@ -37,10 +37,9 @@ kubectl apply -f kaniko_job.yaml
 while true; do
   kubectl get pod -a -l=job-name=kaniko
   STATE=`kubectl get pod -a -l=job-name=kaniko | tail -1 | awk \'{print $3}\'`
-  echo $STATE
   if [ "$STATE" = "Completed" ]; then
     echo "Build done. Printing log"
-    kubectl get logs -l=job-name=kaniko
+    kubectl logs -l=job-name=kaniko
     break
   fi
   sleep 3
